@@ -1,0 +1,921 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Nosso Início 💖</title>
+    <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@400;700&family=Poppins:wght@300;400;600&display=swap" rel="stylesheet">
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Poppins', sans-serif;
+            background: linear-gradient(135deg, #1a0010 0%, #3d0030 40%, #6b0050 100%);
+            min-height: 100vh;
+            overflow-x: hidden;
+            position: relative;
+            color: #FFE4E1;
+        }
+
+        #bg-canvas {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            z-index: 0;
+            pointer-events: none;
+        }
+
+        .container {
+            position: relative;
+            z-index: 2;
+            max-width: 900px;
+            margin: 0 auto;
+            padding: 40px 20px;
+        }
+
+        .close-btn {
+            position: fixed;
+            top: 24px;
+            right: 24px;
+            width: 52px;
+            height: 52px;
+            border-radius: 50%;
+            background: rgba(255, 105, 180, 0.15);
+            border: 2px solid rgba(255, 105, 180, 0.4);
+            color: #FFB6C1;
+            font-size: 1.6rem;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            transition: all 0.35s cubic-bezier(0.4, 0, 0.2, 1);
+            z-index: 100;
+            text-decoration: none;
+            backdrop-filter: blur(10px);
+        }
+
+        .close-btn:hover {
+            background: rgba(220, 20, 60, 0.4);
+            border-color: rgba(255, 105, 180, 0.8);
+            transform: scale(1.15) rotate(90deg);
+            box-shadow: 0 0 30px rgba(220, 20, 60, 0.5);
+            color: #fff;
+        }
+
+        .page-header {
+            text-align: center;
+            padding: 80px 20px 50px;
+            animation: fadeInDown 1s ease both;
+        }
+
+        .page-header .heart-icon {
+            font-size: 5rem;
+            margin-bottom: 20px;
+            display: inline-block;
+            animation: heartbeat 1.5s ease-in-out infinite;
+            filter: drop-shadow(0 0 25px rgba(255, 105, 180, 0.6));
+        }
+
+        .page-header h1 {
+            font-family: 'Playfair Display', serif;
+            font-size: clamp(2.5rem, 7vw, 4rem);
+            color: #FFB6C1;
+            text-shadow: 0 0 40px rgba(255, 105, 180, 0.6);
+            margin-bottom: 16px;
+        }
+
+        .page-header p {
+            font-size: 1.2rem;
+            color: #FF69B4;
+            opacity: 0.9;
+            letter-spacing: 1px;
+            max-width: 500px;
+            margin: 0 auto;
+            line-height: 1.7;
+        }
+
+        @keyframes heartbeat {
+            0%, 100% { transform: scale(1); }
+            25% { transform: scale(1.15); }
+            50% { transform: scale(1); }
+            75% { transform: scale(1.08); }
+        }
+
+        @keyframes fadeInDown {
+            from { opacity: 0; transform: translateY(-30px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        /* Timeline */
+        .timeline {
+            position: relative;
+            padding: 40px 0;
+        }
+
+        .timeline::before {
+            content: '';
+            position: absolute;
+            left: 50%;
+            transform: translateX(-50%);
+            width: 3px;
+            height: 100%;
+            background: linear-gradient(to bottom, #DC143C, #FF69B4, #FFB6C1);
+            border-radius: 3px;
+            opacity: 0.6;
+        }
+
+        .timeline-item {
+            position: relative;
+            width: 50%;
+            padding: 20px 40px;
+            opacity: 0;
+            transform: translateY(40px);
+            transition: all 0.8s cubic-bezier(0.4, 0, 0.2, 1);
+        }
+
+        .timeline-item.visible {
+            opacity: 1;
+            transform: translateY(0);
+        }
+
+        .timeline-item:nth-child(odd) {
+            left: 0;
+            text-align: right;
+        }
+
+        .timeline-item:nth-child(even) {
+            left: 50%;
+            text-align: left;
+        }
+
+        .timeline-dot {
+            position: absolute;
+            width: 20px;
+            height: 20px;
+            background: linear-gradient(45deg, #DC143C, #FF69B4);
+            border-radius: 50%;
+            top: 28px;
+            box-shadow: 0 0 15px rgba(220, 20, 60, 0.6);
+            z-index: 3;
+        }
+
+        .timeline-item:nth-child(odd) .timeline-dot {
+            right: -10px;
+        }
+
+        .timeline-item:nth-child(even) .timeline-dot {
+            left: -10px;
+        }
+
+        .timeline-content {
+            background: rgba(255, 255, 255, 0.06);
+            backdrop-filter: blur(20px);
+            border: 1px solid rgba(255, 105, 180, 0.25);
+            border-radius: 20px;
+            padding: 28px 32px;
+            position: relative;
+            transition: all 0.4s ease;
+        }
+
+        .timeline-content:hover {
+            transform: translateY(-5px);
+            background: rgba(255, 105, 180, 0.1);
+            box-shadow: 0 15px 40px rgba(220, 20, 60, 0.25);
+            border-color: rgba(255, 105, 180, 0.5);
+        }
+
+        .timeline-content .date {
+            font-family: 'Playfair Display', serif;
+            font-size: 1.4rem;
+            color: #FFB6C1;
+            margin-bottom: 8px;
+            text-shadow: 0 0 15px rgba(255, 105, 180, 0.4);
+        }
+
+        .timeline-content h3 {
+            font-family: 'Playfair Display', serif;
+            font-size: 1.3rem;
+            color: #FF69B4;
+            margin-bottom: 10px;
+        }
+
+        .timeline-content p {
+            font-size: 1rem;
+            color: rgba(255, 228, 225, 0.85);
+            line-height: 1.7;
+        }
+
+        .timeline-content .emoji {
+            font-size: 2.5rem;
+            margin-bottom: 12px;
+            display: block;
+        }
+
+        /* Floating decorations */
+        .float-deco {
+            position: fixed;
+            font-size: 2rem;
+            opacity: 0.08;
+            pointer-events: none;
+            z-index: 1;
+            animation: float 8s ease-in-out infinite;
+        }
+
+        .float-deco:nth-child(1) { top: 10%; left: 5%; animation-delay: 0s; }
+        .float-deco:nth-child(2) { top: 30%; right: 8%; animation-delay: 2s; }
+        .float-deco:nth-child(3) { bottom: 20%; left: 10%; animation-delay: 4s; }
+        .float-deco:nth-child(4) { bottom: 40%; right: 5%; animation-delay: 6s; }
+
+        @keyframes float {
+            0%, 100% { transform: translateY(0) rotate(0deg); }
+            50% { transform: translateY(-30px) rotate(10deg); }
+        }
+
+        /* Footer */
+        .page-footer {
+            text-align: center;
+            padding: 60px 20px 40px;
+            font-family: 'Playfair Display', serif;
+            color: #FF69B4;
+            font-size: 1.2rem;
+            opacity: 0.8;
+            animation: fadeInUp 1s 0.3s ease both;
+        }
+
+        @keyframes fadeInUp {
+            from { opacity: 0; transform: translateY(40px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        /* Gallery */
+        .gallery-section {
+            padding: 60px 0 40px;
+            text-align: center;
+        }
+
+        .gallery-section h2 {
+            font-family: 'Playfair Display', serif;
+            font-size: clamp(2rem, 5vw, 2.8rem);
+            color: #FFB6C1;
+            margin-bottom: 12px;
+            text-shadow: 0 0 30px rgba(255, 105, 180, 0.5);
+            animation: fadeInDown 1s ease both;
+        }
+
+        .gallery-section .gallery-sub {
+            font-size: 1.05rem;
+            color: #FF69B4;
+            opacity: 0.85;
+            margin-bottom: 40px;
+            animation: fadeInUp 1s 0.2s ease both;
+        }
+
+        .gallery-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+            gap: 20px;
+            max-width: 1000px;
+            margin: 0 auto;
+        }
+
+        .gallery-item {
+            position: relative;
+            border-radius: 20px;
+            overflow: hidden;
+            cursor: pointer;
+            aspect-ratio: 1 / 1;
+            background: rgba(255, 255, 255, 0.06);
+            border: 1px solid rgba(255, 105, 180, 0.2);
+            transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+            opacity: 0;
+            transform: translateY(30px);
+        }
+
+        .gallery-item.visible {
+            opacity: 1;
+            transform: translateY(0);
+        }
+
+        .gallery-item img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+            transition: transform 0.5s ease;
+            display: block;
+        }
+
+        /* Placeholder quando imagem não carrega */
+        .img-placeholder {
+            width: 100%;
+            height: 100%;
+            display: none;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            background: linear-gradient(135deg, rgba(220,20,60,0.15), rgba(255,105,180,0.1));
+            color: rgba(255, 182, 193, 0.6);
+            gap: 10px;
+        }
+
+        .img-placeholder .placeholder-icon {
+            font-size: 3rem;
+            opacity: 0.5;
+        }
+
+        .img-placeholder .placeholder-text {
+            font-family: 'Playfair Display', serif;
+            font-size: 0.9rem;
+            opacity: 0.5;
+            text-align: center;
+            padding: 0 16px;
+        }
+
+        /* Quando imagem falha, mostra placeholder */
+        .gallery-item.img-error img {
+            display: none;
+        }
+
+        .gallery-item.img-error .img-placeholder {
+            display: flex;
+        }
+
+        /* Esconde overlay em itens com erro (sem foto pra ver) */
+        .gallery-item.img-error {
+            cursor: default;
+        }
+
+        .gallery-item.img-error .gallery-overlay {
+            display: none;
+        }
+
+        .gallery-item:hover {
+            transform: translateY(-8px);
+            box-shadow: 0 20px 50px rgba(220, 20, 60, 0.35);
+            border-color: rgba(255, 105, 180, 0.5);
+        }
+
+        .gallery-item.img-error:hover {
+            transform: none;
+            box-shadow: none;
+        }
+
+        .gallery-item:hover img {
+            transform: scale(1.12);
+        }
+
+        .gallery-overlay {
+            position: absolute;
+            inset: 0;
+            background: linear-gradient(to top, rgba(106, 0, 60, 0.85), transparent 60%);
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: flex-end;
+            padding: 20px;
+            opacity: 0;
+            transition: opacity 0.4s ease;
+        }
+
+        .gallery-item:hover .gallery-overlay {
+            opacity: 1;
+        }
+
+        .gallery-overlay span {
+            font-family: 'Playfair Display', serif;
+            font-size: 1.1rem;
+            color: #FFE4E1;
+            text-shadow: 0 2px 10px rgba(0,0,0,0.5);
+        }
+
+        .gallery-overlay .view-icon {
+            font-size: 2rem;
+            margin-bottom: 8px;
+        }
+
+        /* Lightbox */
+        .lightbox {
+            position: fixed;
+            inset: 0;
+            background: rgba(0, 0, 0, 0.92);
+            backdrop-filter: blur(15px);
+            z-index: 1000;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            opacity: 0;
+            pointer-events: none;
+            transition: opacity 0.4s ease;
+        }
+
+        .lightbox.active {
+            opacity: 1;
+            pointer-events: all;
+        }
+
+        .lightbox-img {
+            max-width: 90vw;
+            max-height: 85vh;
+            border-radius: 16px;
+            box-shadow: 0 30px 80px rgba(0,0,0,0.6);
+            transform: scale(0.9);
+            transition: transform 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+        }
+
+        .lightbox.active .lightbox-img {
+            transform: scale(1);
+        }
+
+        .lightbox-caption {
+            position: absolute;
+            bottom: 30px;
+            left: 50%;
+            transform: translateX(-50%);
+            font-family: 'Playfair Display', serif;
+            font-size: 1.3rem;
+            color: #FFB6C1;
+            text-shadow: 0 2px 15px rgba(0,0,0,0.8);
+            text-align: center;
+            padding: 0 20px;
+        }
+
+        .lightbox-close,
+        .lightbox-prev,
+        .lightbox-next {
+            position: absolute;
+            background: rgba(255, 105, 180, 0.15);
+            border: 2px solid rgba(255, 105, 180, 0.4);
+            color: #FFB6C1;
+            width: 50px;
+            height: 50px;
+            border-radius: 50%;
+            font-size: 1.5rem;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            transition: all 0.3s ease;
+            backdrop-filter: blur(10px);
+        }
+
+        .lightbox-close:hover,
+        .lightbox-prev:hover,
+        .lightbox-next:hover {
+            background: rgba(220, 20, 60, 0.4);
+            border-color: rgba(255, 105, 180, 0.8);
+            transform: scale(1.1);
+            color: #fff;
+        }
+
+        .lightbox-close { top: 24px; right: 24px; }
+
+        .lightbox-prev {
+            left: 24px;
+            top: 50%;
+            transform: translateY(-50%);
+        }
+
+        .lightbox-next {
+            right: 24px;
+            top: 50%;
+            transform: translateY(-50%);
+        }
+
+        .lightbox-prev:hover { transform: translateY(-50%) scale(1.1); }
+        .lightbox-next:hover { transform: translateY(-50%) scale(1.1); }
+
+        @media (max-width: 768px) {
+            .gallery-grid {
+                grid-template-columns: repeat(2, 1fr);
+                gap: 14px;
+            }
+            .lightbox-prev, .lightbox-next {
+                width: 42px;
+                height: 42px;
+                font-size: 1.2rem;
+            }
+            .lightbox-prev { left: 10px; }
+            .lightbox-next { right: 10px; }
+
+            .timeline::before { left: 20px; }
+
+            .timeline-item {
+                width: 100%;
+                left: 0 !important;
+                text-align: left !important;
+                padding-left: 55px;
+                padding-right: 20px;
+            }
+
+            .timeline-item:nth-child(odd) .timeline-dot,
+            .timeline-item:nth-child(even) .timeline-dot {
+                left: 10px;
+                right: auto;
+            }
+
+            .page-header { padding: 70px 16px 30px; }
+
+            .close-btn {
+                width: 44px;
+                height: 44px;
+                font-size: 1.3rem;
+                top: 16px;
+                right: 16px;
+            }
+        }
+    </style>
+</head>
+<body>
+    <canvas id="bg-canvas"></canvas>
+
+    <a href="index.html" class="close-btn" title="Voltar">✕</a>
+
+    <div class="float-deco">💖</div>
+    <div class="float-deco">✨</div>
+    <div class="float-deco">💕</div>
+    <div class="float-deco">🌹</div>
+
+    <div class="container">
+        <header class="page-header">
+            <div class="heart-icon">💖</div>
+            <h1>Nosso Início</h1>
+            <p>Cada momento ao seu lado é um capítulo da história mais linda que já vivi 💕</p>
+        </header>
+
+        <div class="timeline">
+            <div class="timeline-item">
+                <div class="timeline-dot"></div>
+                <div class="timeline-content">
+                    <span class="emoji">💬</span>
+                    <div class="date">Quando tudo começou</div>
+                    <h3>As Primeiras Conversas</h3>
+                    <p>Cada mensagem, cada risada e cada conversa à noite, a gente se falava todos os dias. Você virou a melhor parte dos meus dias, e nossas ligações eram o que mais me deixava feliz.</p>
+                </div>
+            </div>
+
+            <div class="timeline-item">
+                <div class="timeline-dot"></div>
+                <div class="timeline-content">
+                    <span class="emoji">👀</span>
+                    <div class="date">O Primeiro Olhar</div>
+                    <h3>Aquele olhar me prendeu</h3>
+                    <p>Aquele primeiro olhar que mudou minha vida para sempre. Naquele instante, eu soube que você era especial, de que era você a minha alma gêmea.</p>
+                </div>
+            </div>
+
+            <div class="timeline-item">
+                <div class="timeline-dot"></div>
+                <div class="timeline-content">
+                    <span class="emoji">🌹</span>
+                    <div class="date">O Primeiro Encontro</div>
+                    <h3>Nosso dia inesquecível</h3>
+                    <p>Aquele nervosismo gostoso, o coração acelerado e a certeza de que queria estar com você para sempre.</p>
+                </div>
+            </div>
+
+            <div class="timeline-item">
+                <div class="timeline-dot"></div>
+                <div class="timeline-content">
+                    <span class="emoji">💘</span>
+                    <div class="date">10 de Outubro de 2025</div>
+                    <h3>Nosso Primeiro "Eu Te Amo"</h3>
+                    <p>O dia mágico em que tomamos coragem para dizer "eu te amo". Desde então, minha vida mudou, ganhou cores onde antes tudo era cinza, com a certeza de que você sentia o mesmo.</p>
+                </div>
+            </div>
+
+            <div class="timeline-item">
+                <div class="timeline-dot"></div>
+                <div class="timeline-content">
+                    <span class="emoji">🌙</span>
+                    <div class="date">Nossas Noites Juntas</div>
+                    <h3>Cada noite é perfeita</h3>
+                    <p>Conversas sobre o dia, abraços que confortam e a tranquilidade de ter você ao meu lado, finalmente podemos dormir juntas, sem ninguém para interromper. Você é o meu lar.</p>
+                </div>
+            </div>
+
+            <div class="timeline-item">
+                <div class="timeline-dot"></div>
+                <div class="timeline-content">
+                    <span class="emoji">🌅</span>
+                    <div class="date">Cada Novo Dia</div>
+                    <h3>Amor que cresce</h3>
+                    <p>A cada amanhecer, meu amor por você fica mais forte. Você é minha inspiração, minha alegria, minha motivação para continuar e vencer, meu tudo.</p>
+                </div>
+            </div>
+
+            <div class="timeline-item">
+                <div class="timeline-dot"></div>
+                <div class="timeline-content">
+                    <span class="emoji">💍</span>
+                    <div class="date">04/04/2026</div>
+                    <h3>O tão esperado pedido de namoro</h3>
+                    <p>Foi mágico, especial, tudo o que você merece. Quero construir uma vida inteira ao seu lado. Você é o amor da minha vida, hoje e para todo o sempre.</p>
+                </div>
+            </div>
+        </div>
+
+        <!-- GALERIA DE FOTOS -->
+        <section class="gallery-section">
+            <h2>Nossos Momentos 📸</h2>
+            <p class="gallery-sub">Clique nas fotos para ver em tamanho real 💕</p>
+            <div class="gallery-grid" id="gallery-grid">
+                <!--
+                    ATENÇÃO: Se alguma foto não aparecer, verifique:
+                    1. O nome do arquivo é exatamente igual (incluindo maiúsculas/minúsculas)
+                    2. Não há espaços ou acentos no nome do arquivo
+                    3. O arquivo está dentro da pasta assets/fotos/
+                    
+                    Dica: renomeie as fotos para foto1.jpg, foto2.jpg ... sem acentos ou espaços.
+                    
+                    Quando uma imagem não carrega, aparece um placeholder bonito no lugar.
+                -->
+                <div class="gallery-item" data-caption="Nosso primeiro momento juntos">
+                    <img src="foto1.jpg" alt="Foto 1">
+                    <div class="img-placeholder">
+                        <span class="placeholder-icon">📷</span>
+                        <span class="placeholder-text">foto1.jpg</span>
+                    </div>
+                    <div class="gallery-overlay">
+                        <span class="view-icon">🔍</span>
+                        <span>Ver foto</span>
+                    </div>
+                </div>
+
+                <div class="gallery-item" data-caption="Sorriso que ilumina meu dia">
+                    <img src="foto2.jpg" alt="Foto 2">
+                    <div class="img-placeholder">
+                        <span class="placeholder-icon">📷</span>
+                        <span class="placeholder-text">foto2.jpg</span>
+                    </div>
+                    <div class="gallery-overlay">
+                        <span class="view-icon">🔍</span>
+                        <span>Ver foto</span>
+                    </div>
+                </div>
+
+                <div class="gallery-item" data-caption="Cada abraço é especial">
+                    <img src="foto3.jpg" alt="Foto 3">
+                    <div class="img-placeholder">
+                        <span class="placeholder-icon">📷</span>
+                        <span class="placeholder-text">foto3.jpg</span>
+                    </div>
+                    <div class="gallery-overlay">
+                        <span class="view-icon">🔍</span>
+                        <span>Ver foto</span>
+                    </div>
+                </div>
+
+                <div class="gallery-item" data-caption="Meu lugar favorito">
+                    <img src="foto4.jpg" alt="Foto 4">
+                    <div class="img-placeholder">
+                        <span class="placeholder-icon">📷</span>
+                        <span class="placeholder-text">foto4.jpg</span>
+                    </div>
+                    <div class="gallery-overlay">
+                        <span class="view-icon">🔍</span>
+                        <span>Ver foto</span>
+                    </div>
+                </div>
+
+                <div class="gallery-item" data-caption="Nossas aventuras">
+                    <img src="foto5.jpg" alt="Foto 5">
+                    <div class="img-placeholder">
+                        <span class="placeholder-icon">📷</span>
+                        <span class="placeholder-text">foto5.jpg</span>
+                    </div>
+                    <div class="gallery-overlay">
+                        <span class="view-icon">🔍</span>
+                        <span>Ver foto</span>
+                    </div>
+                </div>
+
+                <div class="gallery-item" data-caption="Para sempre nós">
+                    <img src="foto6.jpg" alt="Foto 6">
+                    <div class="img-placeholder">
+                        <span class="placeholder-icon">📷</span>
+                        <span class="placeholder-text">foto6.jpg</span>
+                    </div>
+                    <div class="gallery-overlay">
+                        <span class="view-icon">🔍</span>
+                        <span>Ver foto</span>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <footer class="page-footer">
+            Feito com todo amor do mundo para você 🌹
+        </footer>
+    </div>
+
+    <!-- Lightbox -->
+    <div class="lightbox" id="lightbox">
+        <button class="lightbox-close" id="lb-close">✕</button>
+        <button class="lightbox-prev" id="lb-prev">‹</button>
+        <button class="lightbox-next" id="lb-next">›</button>
+        <img class="lightbox-img" id="lb-img" src="" alt="">
+        <div class="lightbox-caption" id="lb-caption"></div>
+    </div>
+
+    <script>
+        // ===== TRATAMENTO DE ERROS NAS IMAGENS =====
+        // Quando uma imagem não carrega, marca o item com classe img-error
+        // e exibe o placeholder no lugar, sem quebrar o layout.
+        document.querySelectorAll('.gallery-item img').forEach(function(img) {
+            img.addEventListener('error', function() {
+                this.closest('.gallery-item').classList.add('img-error');
+            });
+
+            // Força recheck: se a imagem já falhou antes do listener ser registrado
+            if (img.complete && img.naturalWidth === 0) {
+                img.closest('.gallery-item').classList.add('img-error');
+            }
+        });
+
+        // ===== BACKGROUND FLOATING HEARTS =====
+        const canvas = document.getElementById('bg-canvas');
+        const ctx = canvas.getContext('2d');
+        let particles = [];
+
+        function resizeCanvas() {
+            canvas.width = window.innerWidth;
+            canvas.height = window.innerHeight;
+        }
+        resizeCanvas();
+        window.addEventListener('resize', resizeCanvas);
+
+        class FloatingHeart {
+            constructor() { this.reset(); }
+            reset() {
+                this.x = Math.random() * canvas.width;
+                this.y = canvas.height + 20;
+                this.size = Math.random() * 20 + 10;
+                this.speedY = Math.random() * 1.5 + 0.5;
+                this.speedX = (Math.random() - 0.5) * 0.8;
+                this.opacity = Math.random() * 0.4 + 0.1;
+                this.wobble = Math.random() * Math.PI * 2;
+                this.wobbleSpeed = Math.random() * 0.02 + 0.01;
+                this.life = 1;
+            }
+            update() {
+                this.y -= this.speedY;
+                this.wobble += this.wobbleSpeed;
+                this.x += Math.sin(this.wobble) * 0.5 + this.speedX;
+                this.life -= 0.002;
+                if (this.y < -50 || this.life <= 0) this.reset();
+            }
+            draw() {
+                ctx.save();
+                ctx.globalAlpha = this.opacity * this.life;
+                ctx.font = this.size + 'px Arial';
+                ctx.fillText('💖', this.x, this.y);
+                ctx.restore();
+            }
+        }
+
+        class FloatingNote {
+            constructor() { this.reset(); }
+            reset() {
+                this.x = Math.random() * canvas.width;
+                this.y = canvas.height + 20;
+                this.size = Math.random() * 16 + 12;
+                this.speedY = Math.random() * 1.2 + 0.4;
+                this.speedX = (Math.random() - 0.5) * 0.6;
+                this.opacity = Math.random() * 0.3 + 0.08;
+                this.wobble = Math.random() * Math.PI * 2;
+                this.wobbleSpeed = Math.random() * 0.025 + 0.01;
+                this.emoji = ['💖', '✨', '💕', '🌹', '💘'][Math.floor(Math.random() * 5)];
+            }
+            update() {
+                this.y -= this.speedY;
+                this.wobble += this.wobbleSpeed;
+                this.x += Math.sin(this.wobble) * 0.4 + this.speedX;
+                if (this.y < -50) this.reset();
+            }
+            draw() {
+                ctx.save();
+                ctx.globalAlpha = this.opacity;
+                ctx.font = this.size + 'px Arial';
+                ctx.fillText(this.emoji, this.x, this.y);
+                ctx.restore();
+            }
+        }
+
+        for (let i = 0; i < 35; i++) particles.push(new FloatingHeart());
+        for (let i = 0; i < 25; i++) particles.push(new FloatingNote());
+
+        function animate() {
+            ctx.clearRect(0, 0, canvas.width, canvas.height);
+            particles.forEach(p => { p.update(); p.draw(); });
+            requestAnimationFrame(animate);
+        }
+        animate();
+
+        document.addEventListener('mousemove', function(e) {
+            if (Math.random() < 0.08) {
+                const h = new FloatingHeart();
+                h.x = e.clientX + (Math.random() - 0.5) * 60;
+                h.y = e.clientY + (Math.random() - 0.5) * 60;
+                h.speedY = Math.random() * 2 + 1;
+                h.size = Math.random() * 15 + 8;
+                particles.push(h);
+                if (particles.length > 90) particles.shift();
+            }
+        });
+
+        // ===== SCROLL ANIMATIONS =====
+        const observer = new IntersectionObserver(function(entries) {
+            entries.forEach(function(entry) {
+                if (entry.isIntersecting) {
+                    entry.target.classList.add('visible');
+                }
+            });
+        }, { threshold: 0.15, rootMargin: '0px 0px -50px 0px' });
+
+        document.querySelectorAll('.timeline-item').forEach(function(item) {
+            observer.observe(item);
+        });
+
+        document.querySelectorAll('.gallery-item').forEach(function(item) {
+            observer.observe(item);
+        });
+
+        // ===== LIGHTBOX =====
+        // Só abre lightbox em itens que carregaram a foto com sucesso
+        const galleryItems = Array.from(document.querySelectorAll('.gallery-item'));
+        const lightbox = document.getElementById('lightbox');
+        const lbImg = document.getElementById('lb-img');
+        const lbCaption = document.getElementById('lb-caption');
+        const lbClose = document.getElementById('lb-close');
+        const lbPrev = document.getElementById('lb-prev');
+        const lbNext = document.getElementById('lb-next');
+        let currentIndex = 0;
+
+        // Retorna apenas itens com foto carregada para navegação no lightbox
+        function getValidItems() {
+            return galleryItems.filter(function(item) {
+                return !item.classList.contains('img-error');
+            });
+        }
+
+        function openLightbox(item) {
+            const validItems = getValidItems();
+            currentIndex = validItems.indexOf(item);
+            if (currentIndex === -1) return;
+            lbImg.src = item.querySelector('img').src;
+            lbCaption.textContent = item.dataset.caption || '';
+            lightbox.classList.add('active');
+            document.body.style.overflow = 'hidden';
+        }
+
+        function closeLightbox() {
+            lightbox.classList.remove('active');
+            document.body.style.overflow = '';
+        }
+
+        function prevImage() {
+            const validItems = getValidItems();
+            if (!validItems.length) return;
+            currentIndex = (currentIndex - 1 + validItems.length) % validItems.length;
+            lbImg.src = validItems[currentIndex].querySelector('img').src;
+            lbCaption.textContent = validItems[currentIndex].dataset.caption || '';
+        }
+
+        function nextImage() {
+            const validItems = getValidItems();
+            if (!validItems.length) return;
+            currentIndex = (currentIndex + 1) % validItems.length;
+            lbImg.src = validItems[currentIndex].querySelector('img').src;
+            lbCaption.textContent = validItems[currentIndex].dataset.caption || '';
+        }
+
+        galleryItems.forEach(function(item) {
+            item.addEventListener('click', function() {
+                if (!item.classList.contains('img-error')) {
+                    openLightbox(item);
+                }
+            });
+        });
+
+        lbClose.addEventListener('click', closeLightbox);
+        lbPrev.addEventListener('click', function(e) { e.stopPropagation(); prevImage(); });
+        lbNext.addEventListener('click', function(e) { e.stopPropagation(); nextImage(); });
+
+        lightbox.addEventListener('click', function(e) {
+            if (e.target === lightbox) closeLightbox();
+        });
+
+        document.addEventListener('keydown', function(e) {
+            if (!lightbox.classList.contains('active')) return;
+            if (e.key === 'Escape') closeLightbox();
+            if (e.key === 'ArrowLeft') prevImage();
+            if (e.key === 'ArrowRight') nextImage();
+        });
+    </script>
+</body>
+</html>
