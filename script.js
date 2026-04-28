@@ -927,7 +927,7 @@ function formatTime(seconds) {
 function openPlayer() {
     if (player) return;
 
-    audio.src = "./assets/musica1.mp3";
+    audio.src = "musica1.mp3";
     audio.play().catch(() => {});
     isPlaying = true;
 
